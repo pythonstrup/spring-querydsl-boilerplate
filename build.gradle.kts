@@ -49,7 +49,9 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-// === Querydsl 빌드 옵션 ===
+/**
+ * Gradle Build Optinos
+ */
 val querydslDir = "src/main/generated"
 
 sourceSets {
