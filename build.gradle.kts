@@ -7,6 +7,7 @@ plugins {
 
 group = "com.onebyte"
 version = "0.0.1-SNAPSHOT"
+val queryDslVersion = "5.0.0" // QueryDSL Version Setting
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -32,18 +33,39 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // QueryDSL Implementation
+    implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+
 //    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 //    implementation("org.springframework.boot:spring-boot-starter-security")
 //    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 //    testImplementation("org.springframework.security:spring-security-test")
-
-    // queryDsl
-
 }
 
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+// === Querydsl 빌드 옵션 ===
+val querydslDir = "src/main/generated"
+
+sourceSets {
+    getByName("main").java.srcDirs(querydslDir)
+}
+
+tasks.withType<JavaCompile> {
+    options.generatedSourceOutputDirectory = file(querydslDir)
+}
+
+tasks.named("clean") {
+    doLast {
+        file(querydslDir).deleteRecursively()
+    }
+}
+
 //
 //tasks.test {
 //    outputs.dir(snippetsDir)
