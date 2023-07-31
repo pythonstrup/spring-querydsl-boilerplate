@@ -21,25 +21,31 @@ public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("/v1/user/{id}")
+  @GetMapping("/v1/users/{id}")
   public ResponseEntity<UserDto> findUser(@PathVariable int id) {
     UserDto response = userService.findUser(id);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/v1/user/search")
+  @GetMapping("/v1/users/search")
   public ResponseEntity<List<UserDto>> findUser(@RequestBody UserSearchCondition search) {
     List<UserDto> response = userService.searchUser(search);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping("/v1/user")
+  @GetMapping("/v1/users")
+  public ResponseEntity<List<UserDto>> findUserAll() {
+    List<UserDto> response = userService.findUserAll();
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/v1/users")
   public ResponseEntity<UserDto> saveUser(@RequestBody UserDto user) {
     UserDto response = userService.save(user);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PutMapping("/v1/user")
+  @PutMapping("/v1/users")
   public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
     UserDto response = userService.update(userDto);
     return new ResponseEntity<>(response, HttpStatus.OK);

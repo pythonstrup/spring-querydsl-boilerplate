@@ -6,6 +6,7 @@ import com.onebyte.springboilerplate.entity.User;
 import com.onebyte.springboilerplate.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,12 @@ public class UserService {
     return users.stream()
         .map(user -> UserDto.toDto(user))
         .toList();
+  }
+
+  public List<UserDto> findUserAll() {
+    List<User> userList = userRepository.findUserAll();
+    return userList.stream()
+        .map(user -> UserDto.toDto(user))
+        .collect(Collectors.toList());
   }
 }

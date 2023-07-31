@@ -34,6 +34,13 @@ public class UserRepository {
     return result;
   }
 
+  public List<User> findUserAll() {
+    String jpql = "select u from User u";
+    List<User> resultList = em.createQuery(jpql, User.class)
+        .getResultList();
+    return resultList;
+  }
+
   public List<User> searchUser(UserSearchCondition search) {
     return queryFactory
         .select(user)
