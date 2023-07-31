@@ -1,7 +1,9 @@
 package com.onebyte.springboilerplate.controller;
 
 import com.onebyte.springboilerplate.dto.UserDto;
+import com.onebyte.springboilerplate.dto.UserSearchCondition;
 import com.onebyte.springboilerplate.service.UserService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,12 @@ public class UserController {
   @GetMapping("/v1/user/{id}")
   public ResponseEntity<UserDto> findUser(@PathVariable int id) {
     UserDto response = userService.findUser(id);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/v1/user/search")
+  public ResponseEntity<List<UserDto>> findUser(@RequestBody UserSearchCondition search) {
+    List<UserDto> response = userService.searchUser(search);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

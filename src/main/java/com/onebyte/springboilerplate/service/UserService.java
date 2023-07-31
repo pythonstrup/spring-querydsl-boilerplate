@@ -1,9 +1,11 @@
 package com.onebyte.springboilerplate.service;
 
 import com.onebyte.springboilerplate.dto.UserDto;
+import com.onebyte.springboilerplate.dto.UserSearchCondition;
 import com.onebyte.springboilerplate.entity.User;
 import com.onebyte.springboilerplate.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,12 @@ public class UserService {
     User findUser = userRepository.findUser(userDto.getId());
     findUser.setUsername(userDto.getUsername());
     return UserDto.toDto(findUser);
+  }
+
+  public List<UserDto> searchUser(UserSearchCondition search) {
+    List<User> users = userRepository.searchUser(search);
+    return users.stream()
+        .map(user -> UserDto.toDto(user))
+        .toList();
   }
 }
