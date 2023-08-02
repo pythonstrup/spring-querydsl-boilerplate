@@ -1,0 +1,13 @@
+= Title
+
+== User API
+
+=== User Find All
+- http request
+include::{snippets}/user/http-request.adoc[]
+
+- http response
+include::{snippets}/user/http-response.adoc[]
+
+- response body
+include::{snippets}/user/response-body.adoc[]
