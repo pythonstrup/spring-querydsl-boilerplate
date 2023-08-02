@@ -10,7 +10,7 @@ plugins {
 group = "com.onebyte"
 version = "0.0.1-SNAPSHOT"
 val queryDslVersion = "5.0.0" // QueryDSL Version Setting
-val asciidoctorExt by configurations.creating // 2. configuration 추가
+val asciidoctorExt: Configuration by configurations.creating // 2. configuration 추가
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -89,11 +89,10 @@ tasks {
         configurations("asciidoctorExt")
         dependsOn(test)
 
-        doFirst {
-            delete {
-                file("src/main/resources/static/docs")
-            }
-        }
+        // 없어도 잘 돌아감
+//        doFirst {
+//            delete(file("src/main/resources/static/docs"))
+//        }
     }
 
     bootJar {
@@ -103,6 +102,15 @@ tasks {
         }
     }
 
+    register<Copy>("copyAsciidoctor") {
+        dependsOn(asciidoctor)
+        from(file("$buildDir/docs/asciidoc"))
+        into(file("src/main/resources/static/docs"))
+    }
+
+    build {
+        dependsOn("copyAsciidoctor")
+    }
 }
 
 
