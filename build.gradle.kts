@@ -3,8 +3,11 @@ plugins {
     id("org.springframework.boot") version "3.1.2"
     id("io.spring.dependency-management") version "1.1.2"
 
-    // 1. asciidoctor 플러그인 추가
+    // asciidoctor 플러그인 추가
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+
+    // 1. Jacoco 플러그인 추가
+    id("jacoco")
 }
 
 group = "com.onebyte"
@@ -82,6 +85,7 @@ tasks {
     test {
         outputs.dir(snippetsDir)
         useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
     }
 
     asciidoctor {
@@ -111,6 +115,34 @@ tasks {
     build {
         dependsOn("copyAsciidoctor")
     }
+
+    /**
+     * Jacoco
+     */
+    // 3. 커버리지 결과를 html 파일로 가공
+    jacocoTestReport {
+        dependsOn(test)
+    }
+
+    // 4. 커버리지 기준을 만족하는지 확인해주는 task
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                enabled = true
+
+                element = "CLASS"
+
+                limit {
+                    counter = "BRANCH"
+                    value = "COVEREDRATIO"
+                    minimum = "0.80".toBigDecimal()
+                }
+
+                // 커버리지 체크 제외 클래스 지정
+                excludes = listOf(
+                    "*.Config.*",
+                )
+            }
+        }
+    }
 }
-
-
