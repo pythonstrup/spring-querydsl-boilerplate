@@ -1,5 +1,6 @@
 package com.onebyte.springboilerplate.controller;
 
+import com.onebyte.springboilerplate.dto.ApiResponse;
 import com.onebyte.springboilerplate.dto.UserDto;
 import com.onebyte.springboilerplate.dto.UserSearchCondition;
 import com.onebyte.springboilerplate.service.UserService;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,32 +22,37 @@ public class UserController {
   private final UserService userService;
 
   @GetMapping("/v1/users/{id}")
-  public ResponseEntity<UserDto> findUser(@PathVariable int id) {
-    UserDto response = userService.findUser(id);
+  public ResponseEntity<ApiResponse<UserDto>> findUser(@PathVariable int id) {
+    UserDto result = userService.findUser(id);
+    ApiResponse<UserDto> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/v1/users/search")
-  public ResponseEntity<List<UserDto>> findUser(@RequestBody UserSearchCondition search) {
-    List<UserDto> response = userService.searchUser(search);
+  public ResponseEntity<ApiResponse<List<UserDto>>> findUser(@RequestBody UserSearchCondition search) {
+    List<UserDto> result = userService.searchUser(search);
+    ApiResponse<List<UserDto>> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/v1/users")
-  public ResponseEntity<List<UserDto>> findUserAll() {
-    List<UserDto> response = userService.findUserAll();
+  public ResponseEntity<ApiResponse<List<UserDto>>> findUserAll() {
+    List<UserDto> result = userService.findUserAll();
+    ApiResponse<List<UserDto>> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/v1/users")
-  public ResponseEntity<UserDto> saveUser(@RequestBody UserDto user) {
-    UserDto response = userService.save(user);
+  public ResponseEntity<ApiResponse<UserDto>> saveUser(@RequestBody UserDto user) {
+    UserDto result = userService.save(user);
+    ApiResponse<UserDto> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PutMapping("/v1/users")
-  public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-    UserDto response = userService.update(userDto);
+  public ResponseEntity<ApiResponse<UserDto>> updateUser(@RequestBody UserDto userDto) {
+    UserDto result = userService.update(userDto);
+    ApiResponse<UserDto> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }
