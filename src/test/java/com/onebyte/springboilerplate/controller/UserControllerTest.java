@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.onebyte.springboilerplate.config.RestDocsConfiguration;
 import com.onebyte.springboilerplate.dto.UserDto;
+import com.onebyte.springboilerplate.dto.UserSearchCondition;
 import com.onebyte.springboilerplate.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @AutoConfigureRestDocs
 @WebMvcTest(UserController.class)
@@ -81,6 +84,35 @@ class UserControllerTest {
   }
 
   @Test
+  void testUserSearch() throws Exception {
+    // given
+    UserSearchCondition search = new UserSearchCondition();
+    search.setAge(26);
+    UserDto user1 = UserDto.builder().id(1).username("bell").age(26).build();
+    UserDto user2 = UserDto.builder().id(3).username("park").age(26).build();
+    System.out.println(search);
+
+    // when
+    List<UserDto> response = List.of(user1, user2);
+    Mockito.when(userService.searchUser(search))
+        .thenReturn(response);
+
+    // then
+    // 파라미터 넘기기 방법 1
+//    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/search")
+//        .param("age", "26")
+//        .contentType(MediaType.APPLICATION_JSON));
+
+    // 파라미터 넘기기 방법 2
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    map.add("age", "26");
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/search")
+        .params(map));
+    actions.andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))));
+  }
+
+  @Test
   void testUserSave() throws Exception {
     // given
     UserDto request = UserDto.builder().username("bell").age(26).build();
@@ -96,7 +128,8 @@ class UserControllerTest {
         .content(content)
         .contentType(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(equalTo(asParsedJson(response))));
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(equalTo(asParsedJson(response))))
+        .andDo(print());
   }
 
   private FieldDescriptor[] getReviewFieldDescriptors() {

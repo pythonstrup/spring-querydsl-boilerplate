@@ -3,12 +3,10 @@ package com.onebyte.springboilerplate.repository;
 import static com.onebyte.springboilerplate.entity.QUser.user;
 
 import com.onebyte.springboilerplate.dto.UserSearchCondition;
-import com.onebyte.springboilerplate.entity.QUser;
 import com.onebyte.springboilerplate.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -18,11 +16,11 @@ import org.springframework.util.StringUtils;
 @Transactional
 public class UserRepository {
 
-  @PersistenceContext
-  private EntityManager em;
+  private final EntityManager em;
   private final JPAQueryFactory queryFactory;
 
-  public UserRepository() {
+  public UserRepository(EntityManager em) {
+    this.em = em;
     this.queryFactory = new JPAQueryFactory(em);
   }
 
