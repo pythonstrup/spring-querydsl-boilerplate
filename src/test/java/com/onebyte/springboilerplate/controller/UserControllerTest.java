@@ -41,6 +41,24 @@ class UserControllerTest {
   final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
+  public void testFindUser() throws Exception {
+    // given
+    UserDto response = UserDto.builder().id(1).username("bell").age(26).build();
+
+    // when
+    Mockito.when(userService.findUser(1))
+        .thenReturn(response);
+
+    // then
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/1")
+        .contentType(MediaType.APPLICATION_JSON));
+
+    actions.andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
+        .andDo(print());
+  }
+
+  @Test
   void testFindUserAll() throws Exception {
     FieldDescriptor[] reviews = getReviewFieldDescriptors();
 
@@ -57,7 +75,7 @@ class UserControllerTest {
     ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users")
         .accept(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].username").value("bell"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(list))))
         .andDo(MockMvcRestDocumentation.document("user"))
         .andDo(print());
   }
