@@ -132,6 +132,26 @@ class UserControllerTest {
         .andDo(print());
   }
 
+  @Test
+  public void testUpdateUser() throws Exception {
+    // given
+    UserDto request = UserDto.builder().username("change").age(27).build();
+    UserDto response = UserDto.builder().id(1).username("change").age(27).build();
+
+    // when
+    Mockito.when(userService.update(1, request))
+        .thenReturn(response);
+
+    // then
+    String content = objectMapper.writeValueAsString(request);
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/v1/users/1")
+        .content(content)
+        .contentType(MediaType.APPLICATION_JSON));
+    actions.andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
+        .andDo(print());
+  }
+
   private FieldDescriptor[] getReviewFieldDescriptors() {
     return new FieldDescriptor[]{
         fieldWithPath("username").description("이름"),

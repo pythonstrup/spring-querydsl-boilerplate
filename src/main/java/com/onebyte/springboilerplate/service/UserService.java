@@ -27,9 +27,14 @@ public class UserService {
     return UserDto.toDto(savedUser);
   }
 
-  public UserDto update(UserDto userDto) {
-    User findUser = userRepository.findUser(userDto.getId());
-    findUser.setUsername(userDto.getUsername());
+  public UserDto update(int id, UserDto userDto) {
+    User findUser = userRepository.findUser(id);
+    if (userDto.getUsername() != null) {
+      findUser.setUsername(userDto.getUsername());
+    }
+    if (userDto.getAge() != null) {
+      findUser.setAge(userDto.getAge());
+    }
     return UserDto.toDto(findUser);
   }
 

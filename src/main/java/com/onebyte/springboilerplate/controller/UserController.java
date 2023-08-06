@@ -50,9 +50,11 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PutMapping("/v1/users")
-  public ResponseEntity<ApiResponse<UserDto>> updateUser(@RequestBody UserDto userDto) {
-    UserDto result = userService.update(userDto);
+  @PutMapping("/v1/users/{id}")
+  public ResponseEntity<ApiResponse<UserDto>> updateUser(
+      @PathVariable int id,
+      @RequestBody UserDto userDto) {
+    UserDto result = userService.update(id, userDto);
     ApiResponse<UserDto> response = new ApiResponse<>(result);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
