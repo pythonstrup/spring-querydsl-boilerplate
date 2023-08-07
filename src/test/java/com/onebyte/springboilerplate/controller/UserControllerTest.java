@@ -58,6 +58,7 @@ class UserControllerTest {
 
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
+        .andDo(MockMvcRestDocumentation.document("user/findUser"))
         .andDo(print());
   }
 
@@ -79,7 +80,7 @@ class UserControllerTest {
         .accept(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(list))))
-        .andDo(MockMvcRestDocumentation.document("user"))
+        .andDo(MockMvcRestDocumentation.document("user/findUserAll"))
         .andDo(print());
   }
 
@@ -109,7 +110,8 @@ class UserControllerTest {
     ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/search")
         .params(map));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))));
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
+        .andDo(MockMvcRestDocumentation.document("user/searchUser"));
   }
 
   @Test
@@ -129,6 +131,7 @@ class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(equalTo(asParsedJson(response))))
+        .andDo(MockMvcRestDocumentation.document("user/saveUser"))
         .andDo(print());
   }
 
@@ -149,6 +152,7 @@ class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
+        .andDo(MockMvcRestDocumentation.document("user/updateUser"))
         .andDo(print());
   }
 
