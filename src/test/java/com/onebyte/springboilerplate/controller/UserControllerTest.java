@@ -59,6 +59,7 @@ class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
 
+    // responseFields를 작성할 땐 모든 필드를 작성해야한다.
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
         .andDo(MockMvcRestDocumentation.document("user/findUser", responseFields(
