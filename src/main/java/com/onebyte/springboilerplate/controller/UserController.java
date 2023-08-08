@@ -25,28 +25,28 @@ public class UserController {
   @GetMapping("/v1/users/{id}")
   public ResponseEntity<ApiResponse<UserDto>> findUser(@PathVariable int id) {
     UserDto result = userService.findUser(id);
-    ApiResponse<UserDto> response = new ApiResponse<>(result);
+    ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/v1/users/search")
   public ResponseEntity<ApiResponse<List<UserDto>>> findUser(@ModelAttribute UserSearchCondition search) {
     List<UserDto> result = userService.searchUser(search);
-    ApiResponse<List<UserDto>> response = new ApiResponse<>(result);
+    ApiResponse<List<UserDto>> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/v1/users")
   public ResponseEntity<ApiResponse<List<UserDto>>> findUserAll() {
     List<UserDto> result = userService.findUserAll();
-    ApiResponse<List<UserDto>> response = new ApiResponse<>(result);
+    ApiResponse<List<UserDto>> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/v1/users")
   public ResponseEntity<ApiResponse<UserDto>> saveUser(@RequestBody UserDto user) {
     UserDto result = userService.save(user);
-    ApiResponse<UserDto> response = new ApiResponse<>(result);
+    ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
@@ -55,7 +55,7 @@ public class UserController {
       @PathVariable int id,
       @RequestBody UserDto userDto) {
     UserDto result = userService.update(id, userDto);
-    ApiResponse<UserDto> response = new ApiResponse<>(result);
+    ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

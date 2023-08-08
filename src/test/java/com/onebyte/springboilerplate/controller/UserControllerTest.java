@@ -2,6 +2,7 @@ package com.onebyte.springboilerplate.controller;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -54,18 +56,23 @@ class UserControllerTest {
 
     // then
     ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/1")
-        .contentType(MediaType.APPLICATION_JSON));
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
 
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
-        .andDo(MockMvcRestDocumentation.document("user/findUser"))
+        .andDo(MockMvcRestDocumentation.document("user/findUser", responseFields(
+            fieldWithPath("data").type(JsonFieldType.OBJECT).description("data"),
+            fieldWithPath("message").type(JsonFieldType.STRING).description("message"),
+            fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("The user's primary key"),
+            fieldWithPath("data.username").type(JsonFieldType.STRING).description("The user's name"),
+            fieldWithPath("data.age").type(JsonFieldType.NUMBER).description("The user's age")
+        )))
         .andDo(print());
   }
 
   @Test
   void testFindUserAll() throws Exception {
-    FieldDescriptor[] reviews = getReviewFieldDescriptors();
-
     // given
     List<UserDto> list = new ArrayList<>();
     UserDto user = UserDto.builder().id(1).username("bell").age(26).build();
