@@ -58,7 +58,8 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
     // Fixture Monkey
-    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.5.0")
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.5.3")
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jackson:0.5.3")
 }
 
 /**
