@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.navercorp.fixturemonkey.FixtureMonkey;
+import com.navercorp.fixturemonkey.jackson.plugin.JacksonPlugin;
 import com.onebyte.springboilerplate.config.RestDocsConfiguration;
 import com.onebyte.springboilerplate.dto.UserDto;
 import com.onebyte.springboilerplate.dto.UserSearchCondition;
@@ -164,6 +166,31 @@ class UserControllerTest {
         .andDo(print());
   }
 
+  @Test
+  public void testFixtureMonkey() throws Exception {
+    // given
+    FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+        .plugin(new JacksonPlugin(objectMapper))
+        .build();
+
+    UserDto user1 = fixtureMonkey.giveMeOne(UserDto.class);
+    UserDto user2 = fixtureMonkey.giveMeOne(UserDto.class);
+    UserDto user3 = fixtureMonkey.giveMeOne(UserDto.class);
+    UserDto user4 = fixtureMonkey.giveMeOne(UserDto.class);
+    List<UserDto> list = List.of(user1, user2, user3, user4);
+
+    // when
+    Mockito.when(userService.findUserAll())
+        .thenReturn(list);
+
+    // then
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users")
+        .accept(MediaType.APPLICATION_JSON));
+    actions.andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(list))))
+        .andDo(print());
+  }
+
   private FieldDescriptor[] getReviewFieldDescriptors() {
     return new FieldDescriptor[]{
         fieldWithPath("username").description("이름"),
@@ -175,4 +202,5 @@ class UserControllerTest {
     String json = objectMapper.writeValueAsString(obj);
     return JsonPath.read(json, "$");
   }
+
 }
