@@ -32,6 +32,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -72,7 +73,8 @@ sourceSets {
 }
 
 tasks.withType<JavaCompile> {
-    options.generatedSourceOutputDirectory = file(querydslDir)
+//    options.generatedSourceOutputDirectory = file(querydslDir)
+    options.generatedSourceOutputDirectory.set(file(querydslDir))
 }
 
 tasks.named("clean") {
