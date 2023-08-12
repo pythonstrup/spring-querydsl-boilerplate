@@ -58,4 +58,9 @@ public class UserController {
     ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
+
+  @GetMapping("/v1/user/error")
+  public void error() {
+    throw new RuntimeException("user runtime exception");
+  }
 }
