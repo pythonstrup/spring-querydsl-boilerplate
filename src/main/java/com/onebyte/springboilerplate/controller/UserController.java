@@ -14,43 +14,45 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/users")
 public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("/v1/users/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<ApiResponse<UserDto>> findUser(@PathVariable int id) {
     UserDto result = userService.findUser(id);
     ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/v1/users/search")
+  @GetMapping("/search")
   public ResponseEntity<ApiResponse<List<UserDto>>> findUser(@ModelAttribute UserSearchCondition search) {
     List<UserDto> result = userService.searchUser(search);
     ApiResponse<List<UserDto>> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/v1/users")
+  @GetMapping
   public ResponseEntity<ApiResponse<List<UserDto>>> findUserAll() {
     List<UserDto> result = userService.findUserAll();
     ApiResponse<List<UserDto>> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping("/v1/users")
+  @PostMapping
   public ResponseEntity<ApiResponse<UserDto>> saveUser(@RequestBody UserDto user) {
     UserDto result = userService.save(user);
     ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PutMapping("/v1/users/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<ApiResponse<UserDto>> updateUser(
       @PathVariable int id,
       @RequestBody UserDto userDto) {
@@ -59,7 +61,7 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/v1/user/error")
+  @GetMapping("/error")
   public void error() {
     throw new RuntimeException("user runtime exception");
   }
