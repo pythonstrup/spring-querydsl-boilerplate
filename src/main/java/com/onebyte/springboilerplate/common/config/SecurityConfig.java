@@ -1,5 +1,6 @@
 package com.onebyte.springboilerplate.common.config;
 
+import com.onebyte.springboilerplate.service.OAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+  private final OAuth2UserService oAuth2UserService;
+
+  public SecurityConfig(OAuth2UserService oAuth2UserService) {
+    this.oAuth2UserService = oAuth2UserService;
+  }
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -22,11 +29,19 @@ public class SecurityConfig {
         // authorization
         .authorizeHttpRequests((auth) -> auth
             .requestMatchers("/oauth2/**", "/login/**").permitAll()
-            .anyRequest().authenticated()
+            .requestMatchers("/api/v1/users").authenticated()
         )
         // OAuth2
         .oauth2Login(oauth -> oauth
-            .defaultSuccessUrl("/")
+            .authorizationEndpoint(authorization -> authorization
+                .baseUri("/login/oauth")
+            )
+            .redirectionEndpoint(redirection -> redirection
+                .baseUri("/login/oauth2/code/*")
+            )
+            .userInfoEndpoint(userInfo -> userInfo
+                .userService(oAuth2UserService)
+            )
         );
     return http.build();
   }
