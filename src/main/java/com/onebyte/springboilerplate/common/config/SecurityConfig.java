@@ -1,6 +1,9 @@
 package com.onebyte.springboilerplate.common.config;
 
-import com.onebyte.springboilerplate.service.OAuth2UserService;
+import com.onebyte.springboilerplate.service.oauth.OAuth2UserService;
+import com.onebyte.springboilerplate.service.oauth.OAuthLoginFailureHandler;
+import com.onebyte.springboilerplate.service.oauth.OAuthLoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   private final OAuth2UserService oAuth2UserService;
+
+  @Autowired
+  private OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
+  @Autowired
+  private OAuthLoginFailureHandler oAuthLoginFailureHandler;
 
   public SecurityConfig(OAuth2UserService oAuth2UserService) {
     this.oAuth2UserService = oAuth2UserService;
@@ -29,12 +37,13 @@ public class SecurityConfig {
         // authorization
         .authorizeHttpRequests((auth) -> auth
             .requestMatchers("/oauth2/**", "/login/**").permitAll()
-            .requestMatchers("/api/v1/users").authenticated()
+            .requestMatchers("/api/v1/users").permitAll()
+            .anyRequest().authenticated()
         )
         // OAuth2
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(authorization -> authorization
-                .baseUri("/login/oauth")
+                .baseUri("/login/oauth2")
             )
             .redirectionEndpoint(redirection -> redirection
                 .baseUri("/login/oauth2/code/*")
@@ -42,6 +51,8 @@ public class SecurityConfig {
             .userInfoEndpoint(userInfo -> userInfo
                 .userService(oAuth2UserService)
             )
+            .successHandler(oAuthLoginSuccessHandler)
+            .failureHandler(oAuthLoginFailureHandler)
         );
     return http.build();
   }
