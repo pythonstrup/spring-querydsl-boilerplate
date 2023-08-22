@@ -11,9 +11,10 @@ import com.jayway.jsonpath.JsonPath;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.jackson.plugin.JacksonPlugin;
 import com.onebyte.springboilerplate.config.RestDocsConfiguration;
-import com.onebyte.springboilerplate.dto.UserDto;
-import com.onebyte.springboilerplate.dto.UserSearchCondition;
-import com.onebyte.springboilerplate.service.UserService;
+import com.onebyte.springboilerplate.domain.controller.UserController;
+import com.onebyte.springboilerplate.domain.dto.UserDto;
+import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
+import com.onebyte.springboilerplate.domain.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -48,16 +50,17 @@ class UserControllerTest {
   final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
+  @WithMockUser
   public void testFindUser() throws Exception {
     // given
-    UserDto response = UserDto.builder().id(1).username("bell").age(26).build();
+    UserDto response = UserDto.builder().id(1).username("bell").email("bell@email.com").age(26).build();
 
     // when
     Mockito.when(userService.findUser(1))
         .thenReturn(response);
 
     // then
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/1")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/api/v1/users/1")
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
 
@@ -69,12 +72,14 @@ class UserControllerTest {
             fieldWithPath("message").type(JsonFieldType.STRING).description("message"),
             fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("The user's primary key"),
             fieldWithPath("data.username").type(JsonFieldType.STRING).description("The user's name"),
+            fieldWithPath("data.email").type(JsonFieldType.STRING).description("The user's email"),
             fieldWithPath("data.age").type(JsonFieldType.NUMBER).description("The user's age")
         )))
         .andDo(print());
   }
 
   @Test
+  @WithMockUser
   void testFindUserAll() throws Exception {
     // given
     List<UserDto> list = new ArrayList<>();
@@ -86,7 +91,7 @@ class UserControllerTest {
         .thenReturn(list);
 
     // then
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/api/v1/users")
         .accept(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(list))))
@@ -95,6 +100,7 @@ class UserControllerTest {
   }
 
   @Test
+  @WithMockUser
   void testUserSearch() throws Exception {
     // given
     UserSearchCondition search = new UserSearchCondition();
@@ -110,14 +116,14 @@ class UserControllerTest {
 
     // then
     // 파라미터 넘기기 방법 1
-//    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/search")
+//    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/api/v1/users/search")
 //        .param("age", "26")
 //        .contentType(MediaType.APPLICATION_JSON));
 
     // 파라미터 넘기기 방법 2
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("age", "26");
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users/search")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/api/v1/users/search")
         .params(map));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(response))))
@@ -125,6 +131,7 @@ class UserControllerTest {
   }
 
   @Test
+  @WithMockUser
   void testUserSave() throws Exception {
     // given
     UserDto request = UserDto.builder().username("bell").age(26).build();
@@ -136,7 +143,7 @@ class UserControllerTest {
 
     // then
     String content = objectMapper.writeValueAsString(request);
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.post("/v1/users")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
         .content(content)
         .contentType(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
@@ -146,6 +153,7 @@ class UserControllerTest {
   }
 
   @Test
+  @WithMockUser
   public void testUpdateUser() throws Exception {
     // given
     UserDto request = UserDto.builder().username("change").age(27).build();
@@ -157,7 +165,7 @@ class UserControllerTest {
 
     // then
     String content = objectMapper.writeValueAsString(request);
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/v1/users/1")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/api/v1/users/1")
         .content(content)
         .contentType(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
@@ -167,6 +175,7 @@ class UserControllerTest {
   }
 
   @Test
+  @WithMockUser
   public void testFixtureMonkey() throws Exception {
     // given
     FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
@@ -184,7 +193,7 @@ class UserControllerTest {
         .thenReturn(list);
 
     // then
-    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/v1/users")
+    ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/api/v1/users")
         .accept(MediaType.APPLICATION_JSON));
     actions.andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.data", equalTo(asParsedJson(list))))
