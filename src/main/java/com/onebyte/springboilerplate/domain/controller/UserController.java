@@ -1,9 +1,9 @@
-package com.onebyte.springboilerplate.controller;
+package com.onebyte.springboilerplate.domain.controller;
 
-import com.onebyte.springboilerplate.dto.ApiResponse;
-import com.onebyte.springboilerplate.dto.UserDto;
-import com.onebyte.springboilerplate.dto.UserSearchCondition;
-import com.onebyte.springboilerplate.service.UserService;
+import com.onebyte.springboilerplate.domain.service.UserService;
+import com.onebyte.springboilerplate.domain.dto.ApiResponse;
+import com.onebyte.springboilerplate.domain.dto.UserDto;
+import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

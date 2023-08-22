@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.dto;
+package com.onebyte.springboilerplate.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

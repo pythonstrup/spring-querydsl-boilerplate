@@ -1,7 +1,7 @@
-package com.onebyte.springboilerplate.service.oauth;
+package com.onebyte.springboilerplate.domain.service.oauth;
 
-import com.onebyte.springboilerplate.dto.UserDto;
-import com.onebyte.springboilerplate.service.UserService;
+import com.onebyte.springboilerplate.domain.service.UserService;
+import com.onebyte.springboilerplate.domain.dto.UserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

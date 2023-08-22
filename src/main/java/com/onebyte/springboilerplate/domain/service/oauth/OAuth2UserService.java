@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.service.oauth;
+package com.onebyte.springboilerplate.domain.service.oauth;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

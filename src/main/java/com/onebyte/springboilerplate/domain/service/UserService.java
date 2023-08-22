@@ -1,9 +1,9 @@
-package com.onebyte.springboilerplate.service;
+package com.onebyte.springboilerplate.domain.service;
 
-import com.onebyte.springboilerplate.dto.UserDto;
-import com.onebyte.springboilerplate.dto.UserSearchCondition;
-import com.onebyte.springboilerplate.entity.User;
-import com.onebyte.springboilerplate.repository.UserRepository;
+import com.onebyte.springboilerplate.domain.dto.UserDto;
+import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
+import com.onebyte.springboilerplate.domain.entity.User;
+import com.onebyte.springboilerplate.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;

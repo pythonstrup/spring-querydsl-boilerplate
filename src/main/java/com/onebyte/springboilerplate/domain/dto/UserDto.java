@@ -1,6 +1,6 @@
-package com.onebyte.springboilerplate.dto;
+package com.onebyte.springboilerplate.domain.dto;
 
-import com.onebyte.springboilerplate.entity.User;
+import com.onebyte.springboilerplate.domain.entity.User;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,12 +16,14 @@ public class UserDto {
 
   private Integer id;
   private String username;
+  private String email;
   private Integer age;
 
   public User toEntity() {
     return User.builder()
         .id(id)
         .username(username)
+        .email(email)
         .age(age)
         .build();
   }

@@ -1,14 +1,15 @@
-package com.onebyte.springboilerplate.repository;
+package com.onebyte.springboilerplate.domain.repository;
 
-import static com.onebyte.springboilerplate.entity.QUser.user;
+import static com.onebyte.springboilerplate.domain.entity.QUser.user;
 
-import com.onebyte.springboilerplate.dto.UserSearchCondition;
-import com.onebyte.springboilerplate.entity.User;
+import com.onebyte.springboilerplate.domain.entity.User;
+import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +31,14 @@ public class UserRepository {
         .setParameter("id", id)
         .getSingleResult();
     return result;
+  }
+
+  public Optional<User> findUserByUsername(String username) {
+    String jpql = "select u from User u where u.username = :username";
+    User result = em.createQuery(jpql, User.class)
+        .setParameter("username", username)
+        .getSingleResult();
+    return Optional.of(result);
   }
 
   public List<User> findUserAll() {
