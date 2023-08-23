@@ -3,7 +3,7 @@ package com.onebyte.springboilerplate.domain.repository;
 import static com.onebyte.springboilerplate.domain.entity.QUser.user;
 
 import com.onebyte.springboilerplate.domain.entity.User;
-import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
+import com.onebyte.springboilerplate.domain.dto.user.UserSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -35,10 +35,10 @@ public class UserRepository {
 
   public Optional<User> findUserByUsername(String username) {
     String jpql = "select u from User u where u.username = :username";
-    User result = em.createQuery(jpql, User.class)
+    List<User> userList = em.createQuery(jpql, User.class)
         .setParameter("username", username)
-        .getSingleResult();
-    return Optional.of(result);
+        .getResultList();
+    return userList.stream().findAny();
   }
 
   public List<User> findUserAll() {
