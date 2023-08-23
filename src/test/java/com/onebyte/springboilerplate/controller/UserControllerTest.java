@@ -12,8 +12,9 @@ import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.jackson.plugin.JacksonPlugin;
 import com.onebyte.springboilerplate.config.RestDocsConfiguration;
 import com.onebyte.springboilerplate.domain.controller.UserController;
-import com.onebyte.springboilerplate.domain.dto.UserDto;
-import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
+import com.onebyte.springboilerplate.domain.dto.user.UserDto;
+import com.onebyte.springboilerplate.domain.dto.user.UserSearchCondition;
+import com.onebyte.springboilerplate.domain.dto.user.UserSignInRequest;
 import com.onebyte.springboilerplate.domain.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +135,7 @@ class UserControllerTest {
   @WithMockUser
   void testUserSave() throws Exception {
     // given
-    UserDto request = UserDto.builder().username("bell").age(26).build();
+    UserSignInRequest request = UserSignInRequest.builder().username("bell").email("bell").password("1234").age(26).build();
     UserDto response = UserDto.builder().id(1).username("bell").age(26).build();
 
     // when
