@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+  NOT_FOUND(HttpStatus.NOT_FOUND, ExceptionName.NOT_FOUND.getName(), ExceptionMessage.NOT_FOUND.getMessage()),
   BAD_REQUEST(HttpStatus.BAD_REQUEST, ExceptionName.BAD_REQUEST.getName(), ExceptionMessage.BAD_REQUEST.getMessage()),
   ;
 
