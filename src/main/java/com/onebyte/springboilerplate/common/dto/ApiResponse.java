@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.domain.dto;
+package com.onebyte.springboilerplate.common.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

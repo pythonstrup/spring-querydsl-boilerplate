@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.domain.dto;
+package com.onebyte.springboilerplate.domain.dto.user;
 
 import com.onebyte.springboilerplate.domain.entity.User;
 import java.util.Objects;
@@ -32,6 +32,7 @@ public class UserDto {
     return UserDto.builder()
         .id(user.getId())
         .username(user.getUsername())
+        .email(user.getEmail())
         .age(user.getAge())
         .build();
   }
