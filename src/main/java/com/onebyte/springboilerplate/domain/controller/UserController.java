@@ -1,9 +1,10 @@
 package com.onebyte.springboilerplate.domain.controller;
 
+import com.onebyte.springboilerplate.domain.dto.user.UserSignInRequest;
 import com.onebyte.springboilerplate.domain.service.UserService;
-import com.onebyte.springboilerplate.domain.dto.ApiResponse;
-import com.onebyte.springboilerplate.domain.dto.UserDto;
-import com.onebyte.springboilerplate.domain.dto.UserSearchCondition;
+import com.onebyte.springboilerplate.common.dto.ApiResponse;
+import com.onebyte.springboilerplate.domain.dto.user.UserDto;
+import com.onebyte.springboilerplate.domain.dto.user.UserSearchCondition;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,8 +46,8 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping
-  public ResponseEntity<ApiResponse<UserDto>> saveUser(@RequestBody UserDto user) {
+  @PostMapping("/signin")
+  public ResponseEntity<ApiResponse<UserDto>> saveUser(@RequestBody UserSignInRequest user) {
     UserDto result = userService.save(user);
     ApiResponse<UserDto> response = new ApiResponse<>(result, "");
     return new ResponseEntity<>(response, HttpStatus.OK);

@@ -25,4 +25,8 @@ public class UserSignInRequest {
         .age(age)
         .build();
   }
+
+  public void encodePassword(String encodedPassword) {
+    password = encodedPassword;
+  }
 }
