@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.domain.service.auth;
+package com.onebyte.springboilerplate.common.service.auth;
 
 import com.onebyte.springboilerplate.domain.dto.auth.CustomUserDetails;
 import com.onebyte.springboilerplate.domain.entity.User;

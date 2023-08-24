@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.domain.service.oauth;
+package com.onebyte.springboilerplate.common.service.oauth;
 
 import com.onebyte.springboilerplate.domain.dto.user.UserDto;
 import com.onebyte.springboilerplate.domain.dto.user.UserSignInRequest;

@@ -1,8 +1,8 @@
 package com.onebyte.springboilerplate.common.config;
 
-import com.onebyte.springboilerplate.domain.service.oauth.OAuth2UserService;
-import com.onebyte.springboilerplate.domain.service.oauth.OAuthLoginFailureHandler;
-import com.onebyte.springboilerplate.domain.service.oauth.OAuthLoginSuccessHandler;
+import com.onebyte.springboilerplate.common.service.oauth.OAuth2UserService;
+import com.onebyte.springboilerplate.common.service.oauth.OAuthLoginFailureHandler;
+import com.onebyte.springboilerplate.common.service.oauth.OAuthLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

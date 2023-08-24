@@ -1,4 +1,4 @@
-package com.onebyte.springboilerplate.domain.service.oauth;
+package com.onebyte.springboilerplate.common.service.oauth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
