@@ -28,5 +28,10 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-secret:
-  kakao-secret: secret
+auth:
+  kakao:
+    secret: secret
+
+  jwt:
+    secret: gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049gewGE454568GYhiolLO2465TFY5215kFF45258YYhiolLO2465TFY2049
+    expires: 180000
