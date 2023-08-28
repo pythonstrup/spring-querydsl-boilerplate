@@ -1,6 +1,6 @@
 package com.onebyte.springboilerplate.common.service.auth;
 
-import com.onebyte.springboilerplate.domain.dto.auth.CustomUserDetails;
+import com.onebyte.springboilerplate.common.dto.auth.CustomUserDetails;
 import com.onebyte.springboilerplate.domain.entity.User;
 import com.onebyte.springboilerplate.domain.exception.NotFoundException;
 import com.onebyte.springboilerplate.domain.repository.UserRepository;
@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
     CustomUserDetails customUserDetails
-        = new CustomUserDetails(user.getUsername(), user.getPassword(), user.getEmail());
+        = new CustomUserDetails(user.getUsername(), user.getPassword());
 
     return customUserDetails;
   }
