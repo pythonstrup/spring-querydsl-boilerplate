@@ -7,17 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails, Serializable {
 
-  public CustomUserDetails(String username, String password) {
+  public CustomUserDetails(String username, String password, Collection<GrantedAuthority> authorities) {
     this.username = username;
     this.password = password;
+    this.authorities = authorities;
   }
 
-  private String username;
-  private String password;
+  private final String username;
+  private final String password;
+  private final Collection<GrantedAuthority> authorities;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return this.authorities;
   }
 
   @Override
