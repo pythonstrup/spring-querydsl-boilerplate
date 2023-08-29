@@ -1,5 +1,6 @@
 package com.onebyte.springboilerplate.common.service.oauth;
 
+import com.onebyte.springboilerplate.common.service.jwt.TokenProvider;
 import com.onebyte.springboilerplate.domain.dto.user.UserDto;
 import com.onebyte.springboilerplate.domain.dto.user.UserSignInRequest;
 import com.onebyte.springboilerplate.domain.entity.User;
@@ -7,7 +8,6 @@ import com.onebyte.springboilerplate.domain.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
@@ -24,10 +24,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-  @Value("${secret.kakao-secret}")
+  @Value("${auth.kakao.secret}")
   private String kakaoSecret;
 
   private final UserService userService;
+  private final TokenProvider tokenProvider;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -55,8 +56,13 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
       result = UserDto.toDto(user.get());
     }
 
-    HttpSession session = request.getSession();
-    session.setAttribute("user", result);
+    // Session 방식
+//    HttpSession session = request.getSession();
+//    session.setAttribute("user", result);
+
+    // JWT 방식
+    String jwt = tokenProvider.createToken(authentication);
+    response.setHeader("Authorization", "Bearer " + jwt);
 
     super.onAuthenticationSuccess(request, response, authentication);
   }
