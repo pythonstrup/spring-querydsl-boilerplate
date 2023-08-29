@@ -1,6 +1,5 @@
 package com.onebyte.springboilerplate.common.service.auth.session;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,7 +19,6 @@ public class SessionAuthenticationManager implements AuthenticationManager {
 
   private final UserDetailsService userDetailsService;
   private final PasswordEncoder passwordEncoder;
-  private final ObjectMapper objectMapper;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
