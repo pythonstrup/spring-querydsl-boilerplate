@@ -29,7 +29,9 @@ public class JwtAuthenticationManager implements AuthenticationManager {
       throw new BadCredentialsException("Not Match Password");
     }
 
-    return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(),
+    return new UsernamePasswordAuthenticationToken(
+        userDetails.getUsername(),
+        userDetails.getPassword(),
         userDetails.getAuthorities());
   }
 }

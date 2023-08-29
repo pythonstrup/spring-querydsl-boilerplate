@@ -37,7 +37,7 @@ public class TokenProvider implements InitializingBean {
       @Value("${auth.jwt.expires}") long expires
   ) {
     this.secret = secret;
-    this.expires = expires;
+    this.expires = expires * 60 * 60 * 1000;
   }
 
   @Override
@@ -69,13 +69,12 @@ public class TokenProvider implements InitializingBean {
         .parseClaimsJws(token)
         .getBody();
 
-    List<SimpleGrantedAuthority> authorities = Arrays.stream(
+    List<GrantedAuthority> authorities = Arrays.stream(
             claims.get(AUTHORITY_KEY).toString().split(","))
         .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
 
-    // todo. filter에서 authentication 설정 제대로 해서 수정
-    CustomUserDetails principal = new CustomUserDetails(claims.getSubject(), "");
+    CustomUserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities);
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }
 
