@@ -22,9 +22,11 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
     if (registrationId.equals("kakao-login")) {
       log.info("kakao login");
+    } else if(registrationId.equals("google-login")) {
+      log.info("google login");
     }
 
-    List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN");
+    List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ADMIN");
 
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()

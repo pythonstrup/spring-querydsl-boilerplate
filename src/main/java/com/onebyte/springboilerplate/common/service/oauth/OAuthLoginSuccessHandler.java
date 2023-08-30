@@ -26,6 +26,8 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 
   @Value("${auth.kakao.secret}")
   private String kakaoSecret;
+  @Value("${auth.google.secret}")
+  private String googleSecret;
 
   private final UserService userService;
   private final TokenProvider tokenProvider;
@@ -38,8 +40,15 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     String type = token.getAuthorizedClientRegistrationId();
 
     String email = null;
+    String secret = null;
     if (type.equals("kakao-login")) {
+      log.info("token principal: {}", token.getPrincipal());
       email = ((Map<String, Object>) token.getPrincipal().getAttribute("kakao_account")).get("email").toString();
+      secret = kakaoSecret;
+    } else if (type.equals("google-login")) {
+      log.info("token principal: {}", token.getPrincipal());
+      email = token.getPrincipal().getAttribute("email");
+      secret = googleSecret;
     }
 
     Optional<User> user = userService.findUserByUsername(email);
@@ -49,7 +58,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
       UserSignInRequest signInUser = UserSignInRequest.builder()
           .username(email)
           .email(email)
-          .password(kakaoSecret)
+          .password(secret)
           .build();
       result = userService.save(signInUser);
     } else {
